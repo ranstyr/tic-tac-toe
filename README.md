@@ -1,4 +1,4 @@
-# React App Starter Kit
+# tic-tac-toe
 
 This project was created with **[React App SDK](https://github.com/kriasoft/react-app)** — CLI
 tools and templates for authoring React/Redux applications with just a single dev dependency and
