@@ -11,13 +11,5 @@
     "path": "/error",
     "component": "./routes/Error",
     "chunk": "main"
-  },
-  {
-    "path": "/get-started",
-    "component": "./routes/GetStarted"
-  },
-  {
-    "path": "/tasks/:status(pending|completed)?",
-    "component": "./routes/Home"
   }
 ]

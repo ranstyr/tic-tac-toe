@@ -7,73 +7,150 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { PropTypes } from 'react';
-import Layout from '../../components/Layout';
-import Link from '../../components/Link';
-import s from './Home.css';
+import React, { PropTypes } from "react";
+import Header from "../../components/Header";
+import Board from "../../components/Board";
 
-const title = 'tic-tac-toe game between 2 players';
+const title = "tic-tac-toe game between 2 players";
 
 class HomePage extends React.Component {
-
   static propTypes = {
-    articles: PropTypes.array.isRequired,
+    articles: PropTypes.array.isRequired
   };
 
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
+
+    let database = firebase.database();
+
     // Initialize Firebase
-    let config = {
-      apiKey: "AIzaSyAMkcI6EnDvAn8Eq7ADJH_jI7grn4gqNvM",
-      authDomain: "tictactoe-ran.firebaseapp.com",
-      databaseURL: "https://tictactoe-ran.firebaseio.com",
-      projectId: "tictactoe-ran",
-      storageBucket: "tictactoe-ran.appspot.com",
-      messagingSenderId: "496907418009"
+    this.state = {
+      StartScreen: true,
+      table: ["", "", "", "", "", "", "", "", ""],
+      player: Math.floor(Math.random() * 2) + 1,
+      winner: "",
+      draw: false
     };
-    firebase.initializeApp(config);
   }
 
   componentDidMount() {
     document.title = title;
   }
 
-  render() {
-    return (
-      <Layout className={s.content}>
-        <h1>Welcome!</h1>
-        <p>
-          This website is built with <a href="https://github.com/kriasoft/react-app">React App
-          SDK</a> — CLI tools and templates for authoring React/Redux apps with just a single dev
-          dependency and zero configuration. It is powered by popular front-end dev tools such
-          as <a href="http://babeljs.io/">Babel</a>
-          , <a href="https://webpack.github.io/">Webpack</a>
-          , <a href="http://postcss.org/">PostCSS</a>
-          , <a href="https://github.com/css-modules/css-modules">CSS Modules</a>
-          , <a href="https://browsersync.io/">Browsersync</a>
-          , <a href="https://webpack.github.io/docs/hot-module-replacement.html">HMR</a>
-          , <a href="http://gaearon.github.io/react-hot-loader/">React Hot Loader</a>
-          ; featuring component-based development approach, progressive enhancement,
-          code splitting and async chunk loading, declarative routes, navigation, application
-          state management and more.
-        </p>
-        <p>
-          To learn more visit project's <a href="https://github.com/kriasoft/react-app">homepage</a>
-          , <Link to="/get-started">getting started</Link> guide,
-          join <a href="https://gitter.im/kriasoft/react-app">#react-app</a> chat room on Gitter to
-          stay up to date.
-        </p>
-        <h2>Recent Articles</h2>
-        <ul>
-          {this.props.articles.map((article, i) =>
-            <li key={i}><a href={article.url}>{article.title}</a> by {article.author}</li>
-
-          )}
-        </ul>
-      </Layout>
-    );
+  writeData(state) {
+    const { StartScreen, table, player, winner, draw } = state;
+    return firebase
+      .database()
+      .ref("state")
+      .set({
+        StartScreen,
+        table,
+        player,
+        winner,
+        draw
+      });
   }
 
+  onCellClick(tableIndex) {
+    if (this.state.table[tableIndex] === "" && this.state.winner === "") {
+      this.setState({
+        table: this.updateTable(tableIndex, this.state.player),
+        player: this.nextPlayer()
+      });
+      this.winCheck();
+      this.drawCheck();
+    }
+  }
+
+  getInitialState() {
+    return {
+      StartScreen: true,
+      table: ["", "", "", "", "", "", "", "", ""],
+      player: Math.floor(Math.random() * 2) + 1,
+      winner: "",
+      draw: false
+    };
+  }
+  // change player turn
+  nextPlayer() {
+    return this.state.player === 1 ? 2 : 1;
+  }
+  // update table with current player number
+  updateTable(tableIndex, player) {
+    var table = this.state.table;
+    table[tableIndex] = player;
+    return table;
+  }
+
+  //check win conditions
+  winCheck() {
+    let sumRow, sumColumn, sumDiag1, sumDiag2;
+
+    // check diagonal
+    sumDiag1 = this.state.table[0] + this.state.table[4] + this.state.table[8];
+    sumDiag2 = this.state.table[2] + this.state.table[4] + this.state.table[6];
+    if (sumDiag1 === 3 || sumDiag1 === 6) {
+      this.setState({
+        winner: sumDiag1 === 3 ? 1 : 2
+      });
+    }
+    if (sumDiag2 === 3 || sumDiag2 === 6) {
+      this.setState({
+        winner: sumDiag1 === 3 ? 1 : 2
+      });
+    }
+
+    //check rows
+    for (let i = 0; i <= 6; i += 3) {
+      sumRow =
+        this.state.table[i] + this.state.table[i + 1] + this.state.table[i + 2];
+      if (sumRow === 3 || sumRow === 6) {
+        this.setState({
+          winner: sumRow === 3 ? 1 : 2
+        });
+      }
+    }
+
+    //check columns
+    for (let i = 0; i < 3; i++) {
+      sumColumn =
+        this.state.table[i] + this.state.table[i + 3] + this.state.table[i + 6];
+      if (sumColumn === 3 || sumColumn === 6) {
+        this.setState({
+          winner: sumColumn === 3 ? 1 : 2
+        });
+      }
+    }
+  }
+  //check if table is filled
+  drawCheck() {
+    if (this.state.table.indexOf("") < 0) {
+      this.setState({
+        draw: true
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div className="content">
+        <h1>Welcome!</h1>
+        <div className="game">
+          <div className="container">
+            <Header
+              player={this.state.player}
+              winner={this.state.winner}
+              draw={this.state.draw}
+            />
+            <Board
+              table={this.state.table}
+              onCellClick={this.onCellClick.bind(this)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default HomePage;

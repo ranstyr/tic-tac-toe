@@ -17,7 +17,17 @@ import router from './core/router';
 import history from './core/history';
 
 let routes = require('./routes.json'); // Loaded with utils/routes-loader.js
-const container = document.getElementById('root');
+const container = document.getElementById('Home_root');
+
+let config = {
+  apiKey: "AIzaSyAMkcI6EnDvAn8Eq7ADJH_jI7grn4gqNvM",
+  authDomain: "tictactoe-ran.firebaseapp.com",
+  databaseURL: "https://tictactoe-ran.firebaseio.com",
+  projectId: "tictactoe-ran",
+  storageBucket: "tictactoe-ran.appspot.com",
+  messagingSenderId: "496907418009"
+};
+firebase.initializeApp(config);
 
 function renderComponent(component) {
   ReactDOM.render(<Provider store={store}>{component}</Provider>, container);

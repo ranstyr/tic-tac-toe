@@ -8,10 +8,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <style>
+      /**
+ * React App SDK (https://github.com/kriasoft/react-app)
+ *
+ * Copyright © 2015-present Kriasoft, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+      body {
+        background: #32323c;
+        position: relative;
+        font-family: "Poiret One", cursive;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        margin: auto;
+      }
+
+      h1{
+        height: 10px;
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 10px;
+      }
+
+      .game {
+        background: #32323c;
+        margin-bottom: 20px;
+      }
+      .game__box {
+        display: flex;
+        padding: 0 10px;
+        align-items: center;
+        justify-content: center;
+      }
+      .game__body {
+        display: flex;
+        -ms-flex-flow: wrap;
+        -webkit-flex-flow: wrap;
+        flex-flow: wrap;
+        height: calc(100vh - 150px) ;
+        width: calc(100vw - 40px);
+      }
+      .game__item {
+        width: 33%;
+        height: 33%;c
+        cursor: pointer;
+        position: relative;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+      .game__item.x {
+        cursor: auto;
+      }
+      .game__item.x:before {
+        -moz-transform: translate(-50%, -50%) rotate(45deg);
+        -ms-transform: translate(-50%, -50%) rotate(45deg);
+        -o-transform: translate(-50%, -50%) rotate(45deg);
+        -webkit-transform: translate(-50%, -50%) rotate(45deg);
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 8px;
+        height: 60px;
+        background: #dc6446;
+        display: block;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+      }
+      .game__item.x:after {
+        -moz-transform: translate(-50%, -50%) rotate(-45deg);
+        -ms-transform: translate(-50%, -50%) rotate(-45deg);
+        -o-transform: translate(-50%, -50%) rotate(-45deg);
+        -webkit-transform: translate(-50%, -50%) rotate(-45deg);
+        transform: translate(-50%, -50%) rotate(-45deg);
+        width: 8px;
+        height: 60px;
+        background: #dc6446;
+        display: block;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+      }
+      .game__item.o {
+        cursor: auto;
+      }
+      .game__item.o:after {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        border: 8px solid #5ac5c4;
+        width: 35px;
+        height: 35px;
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      .game__item:nth-child(4),
+      .game__item:nth-child(5),
+      .game__item:nth-child(6) {
+        border-top: 1px solid #808080;
+        border-bottom: 1px solid #808080;
+      }
+      .game__item:nth-child(2),
+      .game__item:nth-child(5),
+      .game__item:nth-child(8) {
+        border-right: 1px solid #808080;
+        border-left: 1px solid #808080;
+      }
+
+      .player {
+        color: white;
+        font-weight: 700;
+      }
+
+      .state {
+        display: flex;
+        border: none;
+        height: 30px;
+        width: 100%;
+        font-size: 26px;
+        color: #808080;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .title {
+        font-size: 40px;
+        text-align: center;
+      }
+
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div class="Home_root" id="Home_root"></div>
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
     <script src="<%= bundle %>"></script>
     <%_ if (!debug && config.trackingID) { _%>
